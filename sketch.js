@@ -252,7 +252,7 @@ function handle75PointLevel() {
 
 // 100 points
 function handle100PointLevel() {
-  currentShrinkSpeed = 2;
+  currentShrinkSpeed = 2 + score*0.1;
 }
 
 // updateCircles
