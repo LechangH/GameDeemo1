@@ -247,7 +247,7 @@ function handle50PointLevel() {
 
 // 75 points
 function handle75PointLevel() {
-  circleTransparency = 70;
+  circleTransparency = 50;
 }
 
 // 100 points
