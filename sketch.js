@@ -63,7 +63,7 @@ function drawMainMenu() {
   }
 
   // RuleButton
-  const rule = drawButton(width / 2 - 100, 400, 200, 60, "Rules");
+  const rule = drawButton(width / 2 - 100, 400, 200, 60, "How To Play");
   if (rule) {
     showRuleFrame();
   }
@@ -127,7 +127,7 @@ function drawButton(x, y, w, h, label) {
 function showRuleFrame() {
   push();
   fill(0, 0, 100, 200);
-  rect(150, 200, 600, 300, 20);
+  rect(150, 350, 500, 150, 20);
 
   // Rules
   //https://creative-coding.decontextualize.com/text-and-type/ text adjustment
@@ -137,13 +137,13 @@ function showRuleFrame() {
   text(
     "HOW TO PLAY:\n" +
     "1. Click colored circles for score\n" +
-    "2. White circles are BOMBS\n" +
-    "3. Difficulty increases:\n" +
-    "   - 25pts: Smaller size + floating bubbles\n" +
-    "   - 50pts: Bombs appear\n" +
-    "   - 75pts: Transparency\n" +
-    "   - 100pts: Faster shrink",
-    170, 230
+    "2. White circles are BOMBS\n" ,
+    // "3. Difficulty increases with point:\n" +
+    // "   - 25pts: Smaller size + floating bubbles\n" +
+    // "   - 50pts: Bombs appear\n" +
+    // "   - 75pts: Transparency\n" +
+    // "   - 100pts: Faster shrink",
+    170, 370
   );
   pop();
 }
