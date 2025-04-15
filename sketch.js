@@ -252,8 +252,18 @@ function handle75PointLevel() {
 
 // 100 points
 function handle100PointLevel() {
-  currentShrinkSpeed = 2 + score*0.1;
-}
+  currentShrinkSpeed = 2 ;
+  if (random() < FloatBubbles.Rate &&
+  Bubbles.length < FloatBubbles.Count) {
+  Bubbles.push({
+    x: random(100, 800),
+    y: height + 100,
+    size: random(...FloatBubbles.size),
+    speed: random(FloatBubbles.Speed - 0.5, FloatBubbles.Speed + 1),
+    hue: random(...FloatBubbles.hue),
+    alpha: random(50,75)
+  });
+}}
 
 // updateCircles
 function updateCircles() {
