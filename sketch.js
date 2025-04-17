@@ -9,6 +9,11 @@ let currentShrinkSpeed = 1;
 let bombGenerationEnabled = false;
 let circleTransparency = 100;
 
+let bombImg;
+
+// let startMusic, gameMusic, bombSound, circleSound;
+// let isMusicPlaying = false;
+
 // let Bubbles = {
 //   active: false,
 //   x: 0,
@@ -28,9 +33,19 @@ const FloatBubbles = {
 let Bubbles = [];
 
 
+function preload() {
+  bombImg = loadImage('bomb.png')
+
+  // startMusic = loadSound('assets/StartScreen.mp3');
+  // gameMusic = loadSound('assets/GameMusic.mp3');
+  // bombSound = loadSound('assets/ClickBomb.mp3');
+  // circleSound = loadSound('assets/ClickCircle.mp3');
+
+}
+
 function setup() {
- let canvas = createCanvas(900, 600);
- canvas.parent("theGame")
+  let canvas = createCanvas(900, 600);
+  canvas.parent("theGame")
   colorMode(HSB, 360, 100, 100, 100);
   noStroke();
   ellipseMode(RADIUS);
@@ -77,6 +92,11 @@ function drawMainMenu() {
 
   text(`HIGH SCORE: ${highScore}`, width / 1.23, 30);
 
+  // if (startMusic.isPlaying() === false && isMusicPlaying === false) {
+  //   startMusic.play();
+  //   startMusic.setLoop(true);
+  //   isMusicPlaying = true;
+  // }
 }
 
 
@@ -137,7 +157,7 @@ function showRuleFrame() {
   text(
     "HOW TO PLAY:\n" +
     "1. Click colored circles for score\n" +
-    "2. White circles are BOMBS\n" ,
+    "2. White circles are BOMBS\n",
     // "3. Difficulty increases with point:\n" +
     // "   - 25pts: Smaller size + floating bubbles\n" +
     // "   - 50pts: Bombs appear\n" +
@@ -154,6 +174,12 @@ function startGame() {
   gameState = "playing";
   circleMaximumRadius = 270 * 0.75;
   Bubbles = [];
+
+  // startMusic.stop();
+  // gameMusic.play();
+  // gameMusic.setLoop(true);
+  // isMusicPlaying = true;
+
   // Bubbles = {
   //   active: false,
   //   x: 0,
@@ -191,7 +217,7 @@ function resetCircles() {
       x: random(circleMaximumRadius, 900 - circleMaximumRadius),
       y: random(circleMaximumRadius, 550 - circleMaximumRadius),
       radius: circleMaximumRadius - 30,
-      color: color(0, 0, 100, circleTransparency),
+      color: color(136, 8, 8, circleTransparency),
       isBomb: true
     });
   }
@@ -252,18 +278,19 @@ function handle75PointLevel() {
 
 // 100 points
 function handle100PointLevel() {
-  currentShrinkSpeed = 2 ;
+  currentShrinkSpeed = 2 + score * 0.002;
   if (random() < FloatBubbles.Rate &&
-  Bubbles.length < FloatBubbles.Count) {
-  Bubbles.push({
-    x: random(100, 800),
-    y: height + 100,
-    size: random(...FloatBubbles.size),
-    speed: random(FloatBubbles.Speed - 0.5, FloatBubbles.Speed + 1),
-    hue: random(...FloatBubbles.hue),
-    alpha: random(50,75)
-  });
-}}
+    Bubbles.length < FloatBubbles.Count) {
+    Bubbles.push({
+      x: random(100, 800),
+      y: height + 100,
+      size: random(...FloatBubbles.size),
+      speed: random(FloatBubbles.Speed - 0.5, FloatBubbles.Speed + 1),
+      hue: random(...FloatBubbles.hue),
+      alpha: random(50, 75)
+    });
+  }
+}
 
 // updateCircles
 function updateCircles() {
@@ -289,11 +316,14 @@ function updateCircles() {
     fill(circle.color);
     ellipse(circle.x, circle.y, circle.radius);
 
-    if (circle.isBomb) {
-      stroke(10, 80, 80);
-      noFill();
+    if (circle.isBomb === false) {
+      fill(circle.color);
       ellipse(circle.x, circle.y, circle.radius);
-      noStroke();
+    }
+
+    else {
+      imageMode(CENTER);
+      image(bombImg, circle.x, circle.y, circle.radius * 2, circle.radius * 2);
     }
   });
 }
@@ -314,16 +344,17 @@ function drawScore() {
   text(score, 880, 20);
 }
 
-// END
+// END Game info
 function endGame() {
   if (gameState === "playing") {
     gameState = "gameover";
     highScore = max(highScore, score);
     storeItem('high_score', highScore);
+    // gameMusic.stop();
   }
 }
 
-// EndScreen
+// END Game screen 2
 function drawGameOver() {
   textAlign(CENTER, CENTER);
   fill(220);
@@ -347,8 +378,10 @@ function mousePressed() {
       const distance = dist(mouseX, mouseY, circle.x, circle.y);
       if (distance < circle.radius) {
         if (circle.isBomb) {
+          // bombSound.play();  
           endGame();
         } else {
+          // circleSound.play();
           score += 1;
           resetCircles();
         }
@@ -363,6 +396,8 @@ function mousePressed() {
     else if (mouseX > 330 && mouseX < 330 + 240 &&
       mouseY > 450 && mouseY < 450 + 60) {
       gameState = "menu";
+      // gameMusic.stop();
+      // startMusic.play();
       loop();
     }
   }
